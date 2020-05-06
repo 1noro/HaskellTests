@@ -1,20 +1,22 @@
 
 import System.IO
+import System.Exit
 
--- prompt :: String -> IO String
--- prompt text = do
---     putStr text
---     hFlush stdout
---     getLine
+getStr :: String -> IO String
+getStr text = do
+    putStr text
+    hFlush stdout
+    getLine
 
-prompt2 :: String -> IO Integer
-prompt2 text = do
+getInteger :: String -> IO Integer
+getInteger text = do
     putStr text
     hFlush stdout
     readLn -- :: IO Integer
 
 printMenu :: IO ()
 printMenu = do
+    putStrLn ""
     putStrLn "--- Menú ---"
     putStrLn " 1 - Altas"
     putStrLn " 2 - Listados"
@@ -22,16 +24,17 @@ printMenu = do
     putStrLn " 0 - Fin"
     putStrLn ""
 
-parseOpt :: Integer -> String
+parseOpt :: Integer -> IO ()
 parseOpt opt
-    | opt == 0 = "Fin"
-    | opt == 1 = "Altas"
-    | opt == 2 = "Listado"
-    | otherwise = "Otro"
+    | opt == 0 = exitSuccess
+    | opt == 1 = putStrLn "Altas."
+    | opt == 2 = putStrLn "Listado."
+    | otherwise = putStrLn ("Optción " ++ (show opt) ++ " incorrecta.")
 
 main :: IO ()
 main = do
     printMenu
-    opt <- prompt2 "Escribe una opción: "
-    putStrLn (parseOpt opt)
+    opt <- getInteger "Escribe una opción: "
+    putStrLn ""
+    parseOpt opt
     main
